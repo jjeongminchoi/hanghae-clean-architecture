@@ -15,24 +15,22 @@ public class Reservation {
     @Column(name = "reservation_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private Users user;
+    @Column(name = "user_id")
+    private Long userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lecture_id")
-    private Lecture lecture;
+    @Column(name = "lecture_id")
+    private Long lectureId;
 
     @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus;
 
-    private Reservation(Users user, Lecture lecture) {
-        this.user = user;
-        this.lecture = lecture;
+    private Reservation(Long userId, Long lectureId) {
+        this.userId = userId;
+        this.lectureId = lectureId;
         this.reservationStatus = ReservationStatus.ACTIVE;
     }
 
-    public static Reservation create(Users user, Lecture lecture) {
-        return new Reservation(user, lecture);
+    public static Reservation create(Long userId, Long lectureId) {
+        return new Reservation(userId, lectureId);
     }
 }

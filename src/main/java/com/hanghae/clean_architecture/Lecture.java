@@ -5,15 +5,12 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Lecture {
-
-    private final int MAX_RESERVATION_COUNT = 30;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,18 +21,24 @@ public class Lecture {
 
     private String lecturer;
 
-    private LocalDate lectureDate;
+    private LocalDateTime lectureDate;
 
-    private LocalTime lectureTime;
-
-    private Lecture(String title, String lecturer, LocalDate lectureDate, LocalTime lectureTime) {
+    private Lecture(String title, String lecturer, LocalDateTime lectureDate) {
         this.title = title;
         this.lecturer = lecturer;
         this.lectureDate = lectureDate;
-        this.lectureTime = lectureTime;
     }
 
-    public static Lecture of(String title, String lecturer, LocalDate lectureDate, LocalTime lectureTime) {
-        return new Lecture(title, lecturer, lectureDate, lectureTime);
+    public static Lecture create(String title, String lecturer, LocalDateTime lectureDate) {
+        return new Lecture(title, lecturer, lectureDate);
+    }
+
+    public LectureResponse toDto(int capacity) {
+        return new LectureResponse(
+                this.title,
+                this.lecturer,
+                this.lectureDate,
+                capacity
+        );
     }
 }
