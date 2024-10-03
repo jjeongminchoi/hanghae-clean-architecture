@@ -1,14 +1,20 @@
 package com.hanghae.clean_architecture.domain.reservation.service;
 
+import com.hanghae.clean_architecture.domain.lecture.Lecture;
 import com.hanghae.clean_architecture.domain.lecture.LectureManager;
 import com.hanghae.clean_architecture.domain.lecture.constant.CapacityStatus;
 import com.hanghae.clean_architecture.domain.reservation.Reservation;
 import com.hanghae.clean_architecture.infrastructure.lecture.LectureManagerRepository;
+import com.hanghae.clean_architecture.infrastructure.lecture.LectureRepository;
 import com.hanghae.clean_architecture.infrastructure.reservation.ReservationRepository;
-import com.hanghae.clean_architecture.interfaces.request.Reserve;
+import com.hanghae.clean_architecture.interfaces.request.reservation.Reserve;
+import com.hanghae.clean_architecture.interfaces.response.reservation.ReservationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -17,6 +23,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final LectureManagerRepository lectureManagerRepository;
+    private final LectureRepository lectureRepository;
 
     @Transactional
     @Override
@@ -40,5 +47,22 @@ public class ReservationServiceImpl implements ReservationService {
         lectureManager.setCapacity();
 
         return reservation.getId();
+    }
+
+    @Override
+    public List<ReservationResponse> searchReservations(Long userId) {
+        // 특강 신청 목록 조회
+        List<Reservation> reservations = reservationRepository.searchReservations(userId);
+        if (reservations.isEmpty()) {
+            throw new IllegalArgumentException("신청한 특강이 없습니다.");
+        }
+
+        // 특강 조회 Response return
+        return reservations.stream()
+                .map(reservation -> {
+                    Lecture lecture = lectureRepository.getLectureById(reservation.getLectureId());
+                    return new ReservationResponse(lecture.getId(), lecture.getTitle(), lecture.getLecturer(), reservation.getReservationStatus());
+                })
+                .collect(Collectors.toList());
     }
 }

@@ -1,4 +1,4 @@
-package com.hanghae.clean_architecture.interfaces.request;
+package com.hanghae.clean_architecture.interfaces.request.reservation;
 
 import lombok.Getter;
 

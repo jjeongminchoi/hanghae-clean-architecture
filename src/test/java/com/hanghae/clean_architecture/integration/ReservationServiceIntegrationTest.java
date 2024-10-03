@@ -2,12 +2,13 @@ package com.hanghae.clean_architecture.integration;
 
 import com.hanghae.clean_architecture.domain.lecture.Lecture;
 import com.hanghae.clean_architecture.domain.lecture.LectureManager;
+import com.hanghae.clean_architecture.domain.reservation.Reservation;
 import com.hanghae.clean_architecture.domain.reservation.service.ReservationServiceImpl;
 import com.hanghae.clean_architecture.infrastructure.lecture.LectureManagerRepository;
 import com.hanghae.clean_architecture.infrastructure.lecture.LectureRepository;
 import com.hanghae.clean_architecture.infrastructure.reservation.ReservationRepository;
-import com.hanghae.clean_architecture.interfaces.request.Reserve;
-import org.assertj.core.api.Assertions;
+import com.hanghae.clean_architecture.interfaces.request.reservation.Reserve;
+import com.hanghae.clean_architecture.interfaces.response.reservation.ReservationResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -61,7 +63,7 @@ public class ReservationServiceIntegrationTest {
         Long result = reservationService.reserve(userId, reserve);
 
         // then
-        assertThat(result).isEqualTo(lectureId);
+        assertThat(result).isEqualTo(1L);
     }
 
     @Test
@@ -77,5 +79,34 @@ public class ReservationServiceIntegrationTest {
 
         // then
         assertThat(result.getCapacity()).isEqualTo(1L);
+    }
+
+    @Test
+    void 특강_신청_목록_조회_성공() {
+        // given
+        Long userId = 1L;
+        Lecture lecture = lectureRepository.findAll().get(0);
+        Lecture lecture2 = lectureRepository.findAll().get(1);
+        Reservation reservation = Reservation.create(userId, lecture.getId());
+        Reservation reservation2 = Reservation.create(userId, lecture2.getId());
+        reservationRepository.save(reservation);
+        reservationRepository.save(reservation2);
+
+        // when
+        List<ReservationResponse> result = reservationService.searchReservations(userId);
+
+        // then
+        assertThat(result.size()).isEqualTo(2);
+    }
+
+    @Test
+    void 특강_신청_목록_조회_내역이_없으면_예외발생() {
+        // given
+        Long userId = 1L;
+
+        // exception
+        assertThatThrownBy(() -> reservationService.searchReservations(userId))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("신청한 특강이 없습니다.");
     }
 }

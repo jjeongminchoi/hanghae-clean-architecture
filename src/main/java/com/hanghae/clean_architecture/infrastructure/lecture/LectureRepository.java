@@ -12,4 +12,7 @@ public interface LectureRepository extends JpaRepository<Lecture, Long> {
 
     @Query("SELECT l FROM Lecture l WHERE l.lectureDate BETWEEN :lectureStartDate AND :lectureEndDate")
     List<Lecture> getLecturesByDate(@Param("lectureStartDate") LocalDateTime lectureStartDate, @Param("lectureEndDate") LocalDateTime lectureEndDate);
+
+    @Query("SELECT l FROM Lecture l WHERE l.id = :lectureId")
+    Lecture getLectureById(@Param("lectureId") Long lectureId);
 }
