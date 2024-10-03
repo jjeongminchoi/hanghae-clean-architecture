@@ -5,11 +5,11 @@ import com.hanghae.clean_architecture.domain.lecture.Lecture;
 import com.hanghae.clean_architecture.domain.lecture.LectureManager;
 import com.hanghae.clean_architecture.infrastructure.lecture.LectureRepository;
 import com.hanghae.clean_architecture.interfaces.response.lecture.LectureResponse;
-import com.hanghae.clean_architecture.interfaces.request.lecture.LectureSearch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,9 +22,9 @@ public class LectureServiceImpl implements LectureService {
     private final LectureManagerRepository lectureManagerRepository;
 
     @Override
-    public List<LectureResponse> searchLectures(LectureSearch lectureSearch) {
+    public List<LectureResponse> searchLectures(LocalDateTime lectureStartDate, LocalDateTime lectureEndDate) {
         // 특강 목록 조회
-        List<Lecture> lectures = lectureRepository.getLecturesByDate(lectureSearch.getLectureStartDate(), lectureSearch.getLectureEndDate());
+        List<Lecture> lectures = lectureRepository.getLecturesByDate(lectureStartDate, lectureEndDate);
         if (lectures.isEmpty()) {
             throw new IllegalArgumentException("조회된 특강이 없습니다.");
         }

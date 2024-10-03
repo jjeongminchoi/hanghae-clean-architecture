@@ -6,7 +6,6 @@ import com.hanghae.clean_architecture.infrastructure.lecture.LectureRepository;
 import com.hanghae.clean_architecture.domain.lecture.service.LectureServiceImpl;
 import com.hanghae.clean_architecture.infrastructure.lecture.LectureManagerRepository;
 import com.hanghae.clean_architecture.interfaces.response.lecture.LectureResponse;
-import com.hanghae.clean_architecture.interfaces.request.lecture.LectureSearch;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -53,15 +52,16 @@ public class LectureServiceTest {
         setId(lecture2, 2L);
         List<Lecture> lectures = List.of(lecture, lecture2);
 
-        LectureSearch lectureSearch = new LectureSearch(LocalDateTime.of(2024, 1, 1, 0, 0), LocalDateTime.of(2024, 12, 31, 0, 0));
+        LocalDateTime lectureStartDate = LocalDateTime.of(2024, 1, 1, 0, 0);
+        LocalDateTime lectureEndDate = LocalDateTime.of(2024, 12, 31, 0, 0);
 
         // stub
-        when(lectureRepository.getLecturesByDate(lectureSearch.getLectureStartDate(), lectureSearch.getLectureEndDate())).thenReturn(lectures);
+        when(lectureRepository.getLecturesByDate(lectureStartDate, lectureEndDate)).thenReturn(lectures);
         when(lectureManagerRepository.getLectureManagerById(1L)).thenReturn(LectureManager.create(lecture.getId()));
         when(lectureManagerRepository.getLectureManagerById(2L)).thenReturn(LectureManager.create(lecture2.getId()));
 
         // when
-        List<LectureResponse> lectureResponses = lectureService.searchLectures(lectureSearch);
+        List<LectureResponse> lectureResponses = lectureService.searchLectures(lectureStartDate, lectureEndDate);
 
         // then
         assertThat(lectureResponses.size()).isEqualTo(2);
@@ -70,13 +70,14 @@ public class LectureServiceTest {
     @Test
     void 특강_목록_조회_내역이_없을_때_예외를_발생시킨다() {
         // given
-        LectureSearch lectureSearch = new LectureSearch(LocalDateTime.of(2024, 1, 1, 0, 0), LocalDateTime.of(2024, 12, 31, 0, 0));
+        LocalDateTime lectureStartDate = LocalDateTime.of(2024, 1, 1, 0, 0);
+        LocalDateTime lectureEndDate = LocalDateTime.of(2024, 12, 31, 0, 0);
 
         // stub
-        when(lectureRepository.getLecturesByDate(lectureSearch.getLectureStartDate(), lectureSearch.getLectureEndDate())).thenReturn(List.of());
+        when(lectureRepository.getLecturesByDate(lectureStartDate, lectureEndDate)).thenReturn(List.of());
 
         // exception
-        assertThatThrownBy(() -> lectureService.searchLectures(lectureSearch))
+        assertThatThrownBy(() -> lectureService.searchLectures(lectureStartDate, lectureEndDate))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("조회된 특강이 없습니다.");
     }

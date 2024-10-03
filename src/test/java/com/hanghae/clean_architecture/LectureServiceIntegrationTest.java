@@ -6,7 +6,6 @@ import com.hanghae.clean_architecture.infrastructure.lecture.LectureRepository;
 import com.hanghae.clean_architecture.domain.lecture.service.LectureServiceImpl;
 import com.hanghae.clean_architecture.infrastructure.lecture.LectureManagerRepository;
 import com.hanghae.clean_architecture.interfaces.response.lecture.LectureResponse;
-import com.hanghae.clean_architecture.interfaces.request.lecture.LectureSearch;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,8 +48,9 @@ class LectureServiceIntegrationTest {
     @Test
     void 특강_목록_조회_성공() {
         // when
-        LectureSearch lectureSearch = new LectureSearch(LocalDateTime.of(2024, 1, 1, 0, 0), LocalDateTime.of(2024, 12, 31, 0, 0));
-        List<LectureResponse> result = lectureService.searchLectures(lectureSearch);
+        LocalDateTime lectureStartDate = LocalDateTime.of(2024, 1, 1, 0, 0);
+        LocalDateTime lectureEndDate = LocalDateTime.of(2024, 12, 31, 0, 0);
+        List<LectureResponse> result = lectureService.searchLectures(lectureStartDate, lectureEndDate);
 
         // then
         assertThat(result.size()).isEqualTo(2);
@@ -65,10 +65,11 @@ class LectureServiceIntegrationTest {
         // given
         lectureRepository.deleteAll();
         lectureManagerRepository.deleteAll();
-        LectureSearch lectureSearch = new LectureSearch(LocalDateTime.of(2024, 1, 1, 0, 0), LocalDateTime.of(2024, 12, 31, 0, 0));
+        LocalDateTime lectureStartDate = LocalDateTime.of(2024, 1, 1, 0, 0);
+        LocalDateTime lectureEndDate = LocalDateTime.of(2024, 12, 31, 0, 0);
 
         // exception
-        assertThatThrownBy(() -> lectureService.searchLectures(lectureSearch))
+        assertThatThrownBy(() -> lectureService.searchLectures(lectureStartDate, lectureEndDate))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("조회된 특강이 없습니다.");
     }
