@@ -1,11 +1,16 @@
 package com.hanghae.clean_architecture;
 
-import org.assertj.core.api.Assertions;
+import com.hanghae.clean_architecture.domain.lecture.Lecture;
+import com.hanghae.clean_architecture.domain.lecture.LectureManager;
+import com.hanghae.clean_architecture.infrastructure.lecture.LectureRepository;
+import com.hanghae.clean_architecture.domain.lecture.service.LectureServiceImpl;
+import com.hanghae.clean_architecture.infrastructure.lecture.LectureManagerRepository;
+import com.hanghae.clean_architecture.interfaces.response.lecture.LectureResponse;
+import com.hanghae.clean_architecture.interfaces.request.lecture.LectureSearch;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.lang.reflect.Field;

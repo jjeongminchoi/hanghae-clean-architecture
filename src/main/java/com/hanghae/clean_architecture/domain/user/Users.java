@@ -1,4 +1,4 @@
-package com.hanghae.clean_architecture;
+package com.hanghae.clean_architecture.domain.user;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

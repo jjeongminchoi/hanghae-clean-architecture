@@ -1,5 +1,8 @@
-package com.hanghae.clean_architecture;
+package com.hanghae.clean_architecture.interfaces.api.lecture;
 
+import com.hanghae.clean_architecture.domain.lecture.service.LectureService;
+import com.hanghae.clean_architecture.interfaces.request.lecture.LectureSearch;
+import com.hanghae.clean_architecture.interfaces.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;

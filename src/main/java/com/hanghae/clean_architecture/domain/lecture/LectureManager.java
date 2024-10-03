@@ -1,5 +1,6 @@
-package com.hanghae.clean_architecture;
+package com.hanghae.clean_architecture.domain.lecture;
 
+import com.hanghae.clean_architecture.domain.lecture.constant.CapacityStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

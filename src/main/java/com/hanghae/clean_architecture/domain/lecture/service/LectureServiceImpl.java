@@ -1,10 +1,15 @@
-package com.hanghae.clean_architecture;
+package com.hanghae.clean_architecture.domain.lecture.service;
 
+import com.hanghae.clean_architecture.infrastructure.lecture.LectureManagerRepository;
+import com.hanghae.clean_architecture.domain.lecture.Lecture;
+import com.hanghae.clean_architecture.domain.lecture.LectureManager;
+import com.hanghae.clean_architecture.infrastructure.lecture.LectureRepository;
+import com.hanghae.clean_architecture.interfaces.response.lecture.LectureResponse;
+import com.hanghae.clean_architecture.interfaces.request.lecture.LectureSearch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -1,5 +1,6 @@
-package com.hanghae.clean_architecture;
+package com.hanghae.clean_architecture.domain.reservation;
 
+import com.hanghae.clean_architecture.domain.reservation.constant.ReservationStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

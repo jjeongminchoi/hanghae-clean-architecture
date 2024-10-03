@@ -1,5 +1,6 @@
-package com.hanghae.clean_architecture;
+package com.hanghae.clean_architecture.infrastructure.lecture;
 
+import com.hanghae.clean_architecture.domain.lecture.LectureManager;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

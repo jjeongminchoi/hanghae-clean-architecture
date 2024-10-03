@@ -1,5 +1,12 @@
 package com.hanghae.clean_architecture;
 
+import com.hanghae.clean_architecture.domain.lecture.Lecture;
+import com.hanghae.clean_architecture.domain.lecture.LectureManager;
+import com.hanghae.clean_architecture.infrastructure.lecture.LectureRepository;
+import com.hanghae.clean_architecture.domain.lecture.service.LectureServiceImpl;
+import com.hanghae.clean_architecture.infrastructure.lecture.LectureManagerRepository;
+import com.hanghae.clean_architecture.interfaces.response.lecture.LectureResponse;
+import com.hanghae.clean_architecture.interfaces.request.lecture.LectureSearch;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,7 +66,6 @@ class LectureServiceIntegrationTest {
         lectureRepository.deleteAll();
         lectureManagerRepository.deleteAll();
         LectureSearch lectureSearch = new LectureSearch(LocalDateTime.of(2024, 1, 1, 0, 0), LocalDateTime.of(2024, 12, 31, 0, 0));
-
 
         // exception
         assertThatThrownBy(() -> lectureService.searchLectures(lectureSearch))
