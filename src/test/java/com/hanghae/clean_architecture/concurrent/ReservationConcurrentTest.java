@@ -61,7 +61,6 @@ public class ReservationConcurrentTest {
         for (int i = 0; i < threadCount; i++) {
             Long userId = (long) (i + 1);
             executorService.submit(() -> {
-                System.out.println("userId : " + userId);
                 try {
                     reservationService.reserve(userId, reserve);
                 } finally {
@@ -76,5 +75,34 @@ public class ReservationConcurrentTest {
 
         // then
         assertThat(reservationRepository.findAll().size()).isEqualTo(30);
+    }
+
+    @Test
+    void 동일한_사용자가_같은_특강을_5번_신청했을_때_1번만_성공해야한다() throws InterruptedException {
+        // given
+        Lecture lecture = lectureRepository.findAll().get(0);
+        Reserve reserve = new Reserve(lecture.getId());
+
+        int threadCount = 5;
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+        CountDownLatch latch = new CountDownLatch(threadCount);
+
+        // when
+        for (int i = 0; i < threadCount; i++) {
+            executorService.submit(() -> {
+                try {
+                    reservationService.reserve(1L, reserve);
+                } finally {
+                    latch.countDown(); // 스레드 작업이 끝나면 countDown한다.
+                }
+            });
+        }
+
+        // 모든 스레드가 작업을 완료할 때까지 대기
+        latch.await();
+        executorService.shutdown();
+
+        // then
+        assertThat(reservationService.searchReservations(1L).size()).isEqualTo(1);
     }
 }
