@@ -9,17 +9,18 @@ import com.hanghae.clean_architecture.infrastructure.lecture.LectureRepository;
 import com.hanghae.clean_architecture.infrastructure.reservation.ReservationRepository;
 import com.hanghae.clean_architecture.interfaces.request.reservation.Reserve;
 import com.hanghae.clean_architecture.interfaces.response.reservation.ReservationResponse;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
+@Transactional
 @SpringBootTest
 public class ReservationServiceIntegrationTest {
 
@@ -43,13 +44,6 @@ public class ReservationServiceIntegrationTest {
         lectureRepository.save(lecture2);
         lectureManagerRepository.save(LectureManager.create(lecture.getId()));
         lectureManagerRepository.save(LectureManager.create(lecture2.getId()));
-    }
-
-    @AfterEach
-    void cleanUp() {
-        reservationRepository.deleteAll();
-        lectureRepository.deleteAll();
-        lectureManagerRepository.deleteAll();
     }
 
     @Test
