@@ -1,4 +1,4 @@
-package com.hanghae.clean_architecture;
+package com.hanghae.clean_architecture.unit;
 
 import com.hanghae.clean_architecture.domain.lecture.Lecture;
 import com.hanghae.clean_architecture.domain.lecture.LectureManager;

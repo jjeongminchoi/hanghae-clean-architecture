@@ -25,6 +25,13 @@ public class LectureManager {
 
     private CapacityStatus capacityStatus;
 
+    public void setCapacity() {
+        this.capacity++;
+        if (capacity == MAX_RESERVATION_COUNT) {
+            capacityStatus = CapacityStatus.FULL;
+        }
+    }
+
     private LectureManager(Long lectureId) {
         this.lectureId = lectureId;
         this.capacity = 0;
